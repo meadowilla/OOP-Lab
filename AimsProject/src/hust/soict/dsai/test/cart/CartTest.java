@@ -6,7 +6,7 @@ import hust.soict.dsai.aims.cart.Cart;
 public class CartTest {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+
 		// Create a new cart
 		Cart cart = new Cart();
 		
