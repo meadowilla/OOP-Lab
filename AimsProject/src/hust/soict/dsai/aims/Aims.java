@@ -11,10 +11,14 @@ public class Aims {
 	private static final Store mainStore = new Store();
 	private static final Cart mainCart = new Cart();
 	
+	public static Cart getCart() {
+		return mainCart;
+	}
+	
 	public static void main(String [] args) {
 		showMenu();
 	}
-
+	
 	public static void showMenu() {
 		System.out.println("AIMS: ");
 		System.out.println("--------------------------------");
