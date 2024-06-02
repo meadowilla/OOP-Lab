@@ -20,16 +20,26 @@ public abstract class Media {
 	public static final Comparator<Media> COMPARE_BY_COST_TITLE = 
 		new MediaComparatorByCostTitle();
 	
+//	@Override
+//	public boolean equals(Object obj) {
+//		if (this == obj) {
+//			return true;
+//		}
+//		if (obj == null || this.getClass() != obj.getClass()) {
+//			return false;
+//		}
+//		Media media = (Media) obj;
+//		return this.title != null? this.title.equals(media.title): media.title == null;
+//	}
+	
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null || this.getClass() != obj.getClass()) {
+	public boolean equals(Object obj) throws NullPointerException{
+		try {
+			Media m = (Media) obj;
+			return (m.getTitle() == this.getTitle());
+		} catch (NullPointerException | ClassCastException e){
 			return false;
 		}
-		Media media = (Media) obj;
-		return this.title != null? this.title.equals(media.title): media.title == null;
 	}
 	
 	public Media(int id, String title, String category, float cost) {

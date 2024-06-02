@@ -3,6 +3,7 @@ package hust.soict.dsai.aims;
 import java.util.Scanner;
 
 import hust.soict.dsai.aims.cart.Cart;
+import hust.soict.dsai.aims.exception.PlayerException;
 import hust.soict.dsai.aims.store.Store;
 import hust.soict.dsai.aims.media.*;
 
@@ -212,10 +213,20 @@ public class Aims {
 		Media media = mainStore.getMedia(title);
 		if (media instanceof CompactDisc){
 			CompactDisc cd = (CompactDisc) media;
-			cd.play();
+			try {
+				cd.play();
+			} catch (PlayerException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		} else if (media instanceof DigitalVideoDisc){
 			DigitalVideoDisc dvd = (DigitalVideoDisc) media;
-			dvd.play();
+			try {
+				dvd.play();
+			} catch (PlayerException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 	}

@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.naming.LimitExceededException;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -15,6 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import hust.soict.dsai.aims.Aims;
+import hust.soict.dsai.aims.exception.PlayerException;
 import hust.soict.dsai.aims.media.CompactDisc;
 import hust.soict.dsai.aims.media.DigitalVideoDisc;
 import hust.soict.dsai.aims.media.Media;
@@ -61,33 +63,51 @@ public class MediaStore extends JPanel{
 	}
 	
 	private class ButtonListener implements ActionListener{
+		
+		private class MessageDialog extends JDialog {
+			public MessageDialog(String message, String title) {
+				add(new JLabel(message));
+				setVisible(true);
+				setTitle(title);
+				setSize(250, 250);
+			}
+		}
+		
 		@Override
-		public void actionPerformed(ActionEvent e) {
+		public void actionPerformed(ActionEvent e){
 			String button = e.getActionCommand();
 			
 			if (button == "Play") {
-				System.out.println("Button Play is clicked.");
-				JDialog dialog = new JDialog();
-				if (e.getSource() instanceof CompactDisc) {
-					System.out.println("Playing...");
-					CompactDisc cd = (CompactDisc) e.getSource();
-					JLabel label = new JLabel("Playing CD " + cd.getTitle() 
-											+ "in length of " + cd.getLength());
-					dialog.add(label);
+				if (media instanceof CompactDisc) {
+					CompactDisc cd = (CompactDisc) media;
+					new MessageDialog("Playing CD " + cd.getTitle() 
+							+ " in length of " + cd.getLength(), "Play");
+					try {
+						cd.play();
+					} catch (PlayerException e1) {
+						e1.printStackTrace();
+					}
 				}
-				else if (e.getSource() instanceof DigitalVideoDisc) {
-					DigitalVideoDisc dvd = (DigitalVideoDisc) e.getSource();
-					JLabel label = new JLabel("Playing DVD " + dvd.getTitle() 
-											+ "in length of " + dvd.getLength());
-					dialog.add(label);
+				else if (media instanceof DigitalVideoDisc) {
+					DigitalVideoDisc dvd = (DigitalVideoDisc) media;
+					new MessageDialog("Playing DVD " + dvd.getTitle() 
+						+ " in length of " + dvd.getLength(), "Play");
+					try {
+						dvd.play();
+					} catch (PlayerException e1) {
+						e1.printStackTrace();
+					}
 				}
 				
-				dialog.setTitle("Play");
-				dialog.setSize(200, 200);
-				dialog.setVisible(true);
 			}
 			else if (button == "Add to cart") {
-				Aims.getCart().addMedia((Media) e.getSource());
+				try {
+					Aims.getCart().addMedia(media);		
+					new MessageDialog("Add successfully!", "Successful Action");
+				} catch (LimitExceededException e1) {
+					new MessageDialog("ERROR: The number of "
+							+ "media has reached its limit", "Limited Exceeded Exception");
+				}
 			}
 		}	
 	}
